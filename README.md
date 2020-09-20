@@ -1,6 +1,6 @@
 # demo_woocommerce
 
-A new Flutter project.
+Proyecto demostrativo que muestra la integración entre una Flutter App y la WooCommerce REST API en su versión 3.
 
 ## Getting Started
 
