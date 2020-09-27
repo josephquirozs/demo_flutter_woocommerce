@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:demo_woocommerce/models/product_model.dart';
-import 'package:demo_woocommerce/providers/wc_client_config.dart';
+import 'package:demo_woocommerce/providers/my_woocommerce_config.dart';
+import 'package:demo_woocommerce/utils/woocommerce_uri.dart';
 import 'package:http/http.dart' as http;
 
 class ProductProvider {
@@ -14,28 +15,30 @@ class ProductProvider {
     print('Ejecutando getAll()');
 
     // Realizamos la petición GET
-    var url = Uri.https(
-      WCClientConfig.authority(),
-      WCClientConfig.path(endpoint),
-      WCClientConfig.params({
+    final url = WooCommerceUri.build(
+      domain: MyWooCommerceConfig.domain,
+      consumerKey: MyWooCommerceConfig.consumerKey,
+      consumerSecret: MyWooCommerceConfig.consumerSecret,
+      endpoint: endpoint,
+      params: {
         'page': page.toString(),
         'per_page': perPage.toString(),
         'search': search,
-      }),
+      },
     );
     print('Petición url: $url');
 
-    var response = await http.get(url);
+    final response = await http.get(url);
     print('Respuesta status: ${response.statusCode}');
     print('Respuesta body: ${response.body}');
 
     // Decodificamos el cuerpo de la respuesta
-    var decodedBody = json.decode(response.body) as List<dynamic>;
+    final decodedBody = json.decode(response.body) as List<dynamic>;
 
     // Convertimos los datos crudos en modelos
-    var results = List<ProductModel>();
+    final results = List<ProductModel>();
     decodedBody.forEach((element) {
-      var result = ProductModel.fromJson(element);
+      final result = ProductModel.fromJson(element);
       results.add(result);
     });
 
